@@ -1,0 +1,113 @@
+body {
+  background-color: rgb(190, 200, 200);
+  font-family: "Roboto", sans-serif;
+}
+#logo {
+  height: 60px;
+}
+#suggestionFrame {
+  margin: 20px;
+}
+input:invalid:focus {
+  background-image: linear-gradient(pink, rgb(238, 230, 144));
+}
+input:valid:focus {
+  background-image: linear-gradient(rgb(192, 247, 255), rgb(144, 238, 161));
+}
+#msg {
+  color: red;
+}
+.hidden {
+  display: none;
+}
+.gameFrame {
+  background: radial-gradient(
+    484px at 49.4% 19%,
+    rgb(23, 156, 214) 0%,
+    rgb(52, 48, 111) 100.2%
+  );
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 2px;
+  /* max-height: 25rem; */
+  /* max-width: 18.75rem; */
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0.25rem 0.25rem 0.37rem lightblue;
+}
+
+.line {
+  display: flex;
+  align-items: center;
+  /* margin-bottom: 1px; */
+}
+
+.letter {
+  color: #ffffff;
+  font-weight: bold;
+  border: 0.5px solid #ffffff;
+  border-radius: 4px;
+  background: radial-gradient(
+    circle,
+    rgb(0, 110, 255) 20%,
+    rgb(0, 81, 161) 80%
+  );
+  height: 4rem;
+  width: 4rem;
+  margin: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 0.125rem 0.125rem 0.1875rem black;
+  position: relative;
+  animation-name: letterFlip;
+  animation-duration: 1s;
+  animation-delay: 0s;
+}
+
+@keyframes letterFlip {
+  from {
+    top: 0px;
+    background-color: rgb(14, 0, 90);
+    transform: rotateY(360deg);
+    transition-timing-function: ease;
+  }
+  to {
+    top: 0px;
+  }
+}
+.letterOK {
+  border-radius: 4px;
+  background: radial-gradient(circle, rgb(255, 0, 0) 20%, rgb(185, 20, 20) 80%);
+}
+.letterMisplaced {
+  border-radius: 50%;
+  border: 0.5px solid #fff;
+  background-image: radial-gradient(
+    circle,
+    rgb(253, 228, 0) 10%,
+    rgb(255, 68, 0) 80%
+  );
+  height: 4rem;
+  width: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.letterNOK {
+  text-decoration: line-through;
+  color: red;
+}
+
+@media (max-width: 768px) {
+  .letter {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+  .letterMisplaced {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+}

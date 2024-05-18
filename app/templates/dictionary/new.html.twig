@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Dictionary{% endblock %}
+
+{% block body %}
+    <h1>Create new Dictionary</h1>
+
+    {{ include('dictionary/_form.html.twig') }}
+
+    <a href="{{ path('app_dictionary_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Dictionary{% endblock %}
+
+{% block body %}
+    <h1>Edit Dictionary</h1>
+
+    {{ include('dictionary/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_dictionary_index') }}">back to list</a>
+
+    {{ include('dictionary/_delete_form.html.twig') }}
+{% endblock %}

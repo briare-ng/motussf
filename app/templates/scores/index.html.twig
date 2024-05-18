@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Scores index
+{% endblock %}
+
+{% block body %}
+	<div class="container text-center">
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<h1>{{titre}}</h1>
+				<table class="table table-hover table-sm shadow-lg">
+					<thead class="table-dark">
+						<tr>
+							<th>Points</th>
+							<th>Joueur</th>
+							<th>Mot</th>
+							<th>Date et heure</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for score in scores %}
+							<tr>
+								<td>{{ score.points }}</td>
+								<td>{{ score.user.getUsername() }}</td>
+								<td>{{ score.word.getWord() }}</td>
+								<td>{{ score.dateTime ? score.dateTime|date('d/m/Y H:i') : '' }}</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="4">no records found</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-4">
+				<h1>{{titre2}}</h1>
+				<table class="table table-hover table-sm shadow-lg mt-3">
+					<thead class="table-dark">
+						<tr>
+							<th>Joueur</th>
+							<th>total scores</th>
+							<th>parties</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for TopPlayer in TopPlayers %}
+							<tr>
+								<td>{{ TopPlayer.username }}</td>
+								<td>{{ TopPlayer.total }}</td>
+								<td>{{ TopPlayer.games }}</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="4">no records found</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}

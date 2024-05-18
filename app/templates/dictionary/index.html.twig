@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dictionary index
+{% endblock %}
+
+{% block body %}
+	<h1>Dictionary index</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>NumberLetters</th>
+				<th>Word</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for dictionary in dictionaries %}
+				<tr>
+					<td>{{ dictionary.id }}</td>
+					<td>{{ dictionary.numberLetters }}</td>
+					<td>{{ dictionary.word }}</td>
+					<td>
+						{# <a href="{{ path('app_dictionary_show', {'id': dictionary.id}) }}">show</a> #}
+						{# <a href="{{ path('app_dictionary_edit', {'id': dictionary.id}) }}">edit</a> #}
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	{# <a href="{{ path('app_dictionary_new') }}">Create new</a> #}
+{% endblock %}
