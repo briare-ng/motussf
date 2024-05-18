@@ -17,6 +17,14 @@ input:valid:focus {
 #msg {
   color: red;
 }
+form ul {
+  margin: 0;
+  padding-left: 0.25rem;
+}
+form li {
+  list-style: none;
+  font-size: 0.75rem;
+}
 .hidden {
   display: none;
 }
