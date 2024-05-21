@@ -14,8 +14,8 @@ let attemptCount; //nb de tentatives du joueur
 let difficulty = document.getElementById("difficulte");
 let difficultyLevel = 6;
 let btnValidation = document.getElementById("validation");
-let buttonV = document.getElementById("validation");
 let form = document.querySelector("form");
+let suggestionFrame = document.getElementById("suggestionFrame");
 let formInput = document.getElementById("suggestion");
 let gameMsg = document.getElementById("gameMsg");
 let replayBtn = document.getElementById("replay");
@@ -66,7 +66,7 @@ function compare(motATrouver, input) {
       countLetters[lettre] = 1;
     }
   }
-  console.log(countLetters);
+  // console.log(countLetters);
   for (let i = 0; i < input.length; i++) {
     let lettre = input[i];
     //vérifier une à une que les lettres sont dans le mot à trouver
@@ -84,14 +84,24 @@ function compare(motATrouver, input) {
       countLetters[lettre]--;
     }
   }
-  console.log(tabLettresTrouvees);
-  console.log(tabLettresMalplacees);
-  console.log(countLetters);
+  // console.log(tabLettresTrouvees);
+  // console.log(tabLettresMalplacees);
+  // console.log(countLetters);
 }
 
 //vérifie si la partie est finie
+//est ce que toutes les lettres sont trouvées dans le nombre d'essais autorisé?
 function isGameOver(nbtentatives, tabLettresOK) {
-  //est ce que toutes les lettres sont trouvées dans le nombre d'essais autorisé?
+  if (nbtentatives == attemptMax) {
+    for (let i = 0; i < tabLettresOK.length; i++) {
+      isSucceed = true;
+      if (!tabLettresOK[i]) {
+        isSucceed = false;
+      }
+      return true;
+    }
+  }
+
   //attemptCount<6? continue game
   if (nbtentatives < attemptMax) {
     isSucceed = true;
@@ -105,12 +115,10 @@ function isGameOver(nbtentatives, tabLettresOK) {
   }
 
   //attemptCount>6? game over you loose
-  if (nbtentatives >= attemptMax) {
+  if (nbtentatives > attemptMax) {
     isSucceed = false;
     return true;
   }
-  //isSucceed == true  game over you win
-  console.log(`le jeu est gagné? : ${isSucceed}`);
 }
 
 // affichage de la grille + avec choix d'un mot selon la difficulté
@@ -128,12 +136,14 @@ async function initGame(difficultyLevel) {
   grid.letterMisplacedCLass = "letterMisplaced";
   grid.letterNOK = "letterNOK";
   grid.generate();
-  console.log(`le mot à trouver est : ${word.mot}`);
+  // console.log(`le mot à trouver est : ${word.mot}`);
   replayBtn.classList.add("hidden");
   form.classList.remove("hidden");
+  isSucceed = false;
   attemptCount = 0;
+  msg.innerHTML = "";
   gameMsg.innerText = "";
-  buttonV.classList.add("hidden");
+  btnValidation.classList.add("hidden");
   formInput.focus();
   // console.log("element en focus : " + document.activeElement);
 }
@@ -153,22 +163,21 @@ function insertScore(points, word_id) {
     .then((response) => response.text())
     .then((data) => console.log(data))
     .catch((error) => {
-      console.error("Erreur à l'insertion en BDD :", error);
+      console.error("Erreur à l'insertion du score en BDD :", error);
     });
 }
 
 /////////////////////      programe principal du jeu    ////////////////////////////
 window.addEventListener("load", async (event) => {
   ////initialisation du jeu
-  console.log("DOM loaded");
+  // console.log("DOM loaded");
   await initGame();
   attemptMax = 6; //réglage du nb de suggestions maximum
-  console.log(`1st init : ${word.mot}`);
 
   //modif du mot et de la grille si la difficultée est modifiée par le joueur
   difficulty.addEventListener("change", (e) => {
     difficultyLevel = difficulty.value;
-    console.log(`la difficulté est réglée à ${difficultyLevel}`);
+    // console.log(`la difficulté est réglée à ${difficultyLevel}`);
     //recharger le jeu avec une nouvelle difficulté
     initGame(difficultyLevel);
     // régler les attributs de l'input
@@ -181,10 +190,13 @@ window.addEventListener("load", async (event) => {
   form.addEventListener("keyup", (e) => {
     if (form.checkValidity()) {
       // Le formulaire est valide on affiche le btn de sousmission
-      buttonV.classList.remove("hidden");
+      btnValidation.classList.remove("hidden");
     } else {
-      buttonV.classList.add("hidden");
+      btnValidation.classList.add("hidden");
     }
+  });
+  formInput.addEventListener("keydown", (e) => {
+    msg.innerHTML = "";
   });
 
   //évènement sur une suggestion de mot
@@ -197,7 +209,6 @@ window.addEventListener("load", async (event) => {
     e.preventDefault(); //si le btn est de type submit on ne recharge pas la page
     let input = formInput.value;
     input = sanitizeInput(input);
-    console.log(input + " log2");
 
     //le script ne se poursuis pas si le mot n'est pas validé par sanitizeInput()
     if (input == null) {
@@ -218,9 +229,15 @@ window.addEventListener("load", async (event) => {
     compare(word.mot, input);
     grid.update(input, tabLettresTrouvees, tabLettresMalplacees, isInDict);
     attemptCount++;
-    console.log(`nombres de tentatives du joueur : ${attemptCount}`);
+    // console.log(`nombres de tentatives du joueur : ${attemptCount}`);
     //efface la zone de saisie
     document.getElementById("suggestion").value = "";
+
+    suggestionFrame.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+      inline: "nearest",
+    });
 
     gameOver = isGameOver(attemptCount, tabLettresTrouvees);
     console.log(
@@ -234,7 +251,7 @@ window.addEventListener("load", async (event) => {
     }
     if (gameOver && !isSucceed) {
       form.classList.add("hidden");
-      gameMsg.innerText = `You Loose! Le mot était : ${word.mot}`;
+      gameMsg.innerText = `Perdu! Le mot était : ${word.mot}`;
       replayBtn.classList.remove("hidden");
       replayBtn.focus();
     }
@@ -242,7 +259,7 @@ window.addEventListener("load", async (event) => {
       form.classList.add("hidden");
       let score =
         (attemptMax - attemptCount + 1) * attemptMax * difficultyLevel;
-      gameMsg.innerText = `You win! Bravo, tu as marqué ${score} points !`;
+      gameMsg.innerText = `Gagné! Bravo, tu as marqué ${score} points !`;
       replayBtn.classList.remove("hidden");
       replayBtn.focus();
       //enregistre le score du joueur en BDD via fetch method:post

@@ -36,7 +36,7 @@ class Mot {
         .toUpperCase();
       this.dico[id] = word;
     }
-    console.log(this.dico);
+    // console.log(this.dico);
   }
 
   //random select un mot dans la BD
@@ -45,7 +45,7 @@ class Mot {
     let randomKey = keys[Math.floor(Math.random() * keys.length)];
     this.motId = randomKey; 
     this.mot = this.dico[randomKey]; 
-      console.log("randomPick = " + this.motId + " : " + this.mot);
+      console.log("randomPick = id " + this.motId + " : " + this.mot);
   }
 
   isInDB(input) {
